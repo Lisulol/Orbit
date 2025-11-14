@@ -30,12 +30,24 @@ export default function ISS() {
   const lon = issData.iss_position.longitude
 
   return (
-    <div className="h-full flex flex-col w-3/12 rounded-4xl border-2 border-[#7e8bfc] bg-[#0b0e2b]">
+    <div
+      className="h-full flex flex-col w-3/12 rounded-4xl border-2"
+      style={{
+        borderColor: "var(--border-color)",
+        backgroundColor: "var(--bg-secondary)",
+      }}
+    >
       <div className="h-3/5 rounded-t-3xl overflow-hidden">
         <Map issData={issData} {...({} as any)} />
       </div>
 
-      <div className="h-2/5 w-full text-white flex flex-col text-xs divide-y divide-[#738bfc]">
+      <div
+        className="h-2/5 w-full flex flex-col text-xs divide-y"
+        style={{
+          color: "var(--text-primary)",
+          borderColor: "var(--border-light)",
+        }}
+      >
         <p className="flex items-center justify-center p-2">
           ISS Latitude: {lat}°
         </p>

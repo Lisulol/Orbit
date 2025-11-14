@@ -11,13 +11,22 @@ export default function MapContent({ issData }: { issData: any }) {
     setIsReady(true)
   }, [])
 
-  if (!isReady) return <div className="h-full w-full bg-[#0b0e2b]" />
+  if (!isReady)
+    return (
+      <div
+        className="h-full w-full"
+        style={{ backgroundColor: "var(--bg-secondary)" }}
+      />
+    )
 
   const lat = parseFloat(issData.iss_position.latitude)
   const lon = parseFloat(issData.iss_position.longitude)
 
+  // Use a default color that works for both themes
+  const borderColor = "#7e8bfc"
+
   const markerIcon = L.divIcon({
-    html: '<div style="width:20px;height:20px;background:#7e8bfc;border-radius:50%;border:2px solid white;"></div>',
+    html: `<div style="width:20px;height:20px;background:${borderColor};border-radius:50%;border:2px solid white;"></div>`,
     iconSize: [20, 20],
     className: "iss-marker",
   })
