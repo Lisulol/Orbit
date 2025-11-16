@@ -61,7 +61,7 @@ export default function Picture() {
               borderColor: "var(--border-light)",
             }}
           >
-            {PictureData.explanation.slice(0, 20)}...
+            {(PictureData.explanation ?? "").slice(0, 20)}...
             <span
               className="absolute opacity-0 group-hover:opacity-100 transition-opacity rounded-4xl border p-5 text-xs whitespace-normal z-999 top-0 left-0 w-55 -mt-102 pointer-events-none"
               style={{
@@ -70,7 +70,7 @@ export default function Picture() {
                 borderColor: "var(--border-light)",
               }}
             >
-              {PictureData.explanation}
+              {PictureData.explanation ?? "No description available."}
             </span>
           </p>
         </div>
