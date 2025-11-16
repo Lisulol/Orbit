@@ -1,47 +1,40 @@
-"use client"
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet"
-import L from "leaflet"
-import "leaflet/dist/leaflet.css"
-import { useEffect, useState } from "react"
+type Props = {
+  issData?: {
+    iss_position?: {
+      latitude?: string
+      longitude?: string
+    }
+  }
+}
 
-export default function MapContent({ issData }: { issData: any }) {
-  const [isReady, setIsReady] = useState(false)
+export default function MapContent({ issData }: Props) {
+  const latitude = Number(issData?.iss_position?.latitude ?? 0)
+  const longitude = Number(issData?.iss_position?.longitude ?? 0)
 
-  useEffect(() => {
-    setIsReady(true)
-  }, [])
-
-  if (!isReady)
+  if (!latitude && !longitude) {
     return (
       <div
-        className="h-full w-full"
+        className="h-full w-full flex items-center justify-center"
         style={{ backgroundColor: "var(--bg-secondary)" }}
       />
     )
+  }
 
-  const lat = parseFloat(issData.iss_position.latitude)
-  const lon = parseFloat(issData.iss_position.longitude)
-
-  // Use a default color that works for both themes
-  const borderColor = "#7e8bfc"
-
-  const markerIcon = L.divIcon({
-    html: `<div style="width:20px;height:20px;background:${borderColor};border-radius:50%;border:2px solid white;"></div>`,
-    iconSize: [20, 20],
-    className: "iss-marker",
-  })
+  const width = 640
+  const height = 360
+  const zoom = 4
+  const marker = `${latitude},${longitude},red-pushpin`
+  const src = `https://staticmap.openstreetmap.de/staticmap.php?center=${latitude},${longitude}&zoom=${zoom}&size=${width}x${height}&markers=${marker}`
 
   return (
-    <MapContainer
-      center={[lat, lon]}
-      zoom={4}
-      className="h-full w-full"
-      scrollWheelZoom={false}
-    >
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      <Marker position={[lat, lon]} icon={markerIcon}>
-        <Popup>ISS Location</Popup>
-      </Marker>
-    </MapContainer>
+    <div className="h-full w-full flex items-center justify-center">
+      <img
+        src={src}
+        alt="ISS Location"
+        width={width}
+        height={height}
+        className="rounded-lg"
+      />
+    </div>
   )
 }

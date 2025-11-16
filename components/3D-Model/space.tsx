@@ -5,7 +5,6 @@ import * as THREE from "three"
 import Navbar from "../navbar/navbar"
 import { Particles } from "../ui/shadcn-io/particles"
 export default function SpaceModel() {
-  const [ishovering, setIshovering] = useState(false)
   const [info, setInfo] = useState("")
   const planets = [
     {
@@ -14,7 +13,7 @@ export default function SpaceModel() {
       distance: 30,
       color: 0x8c7853,
       speed: 1.2,
-      info: "☀️ Closest to Sun\n🌡️ Temp: 430°C\n🪨 Rocky",
+      info: " Closest to Sun \n Temp: 430°C \n Rocky",
     },
     {
       name: "Venus",
@@ -22,7 +21,7 @@ export default function SpaceModel() {
       distance: 60,
       color: 0xffc649,
       speed: 0.9,
-      info: "☀️ Hottest Planet\n🌡️ Temp: 465°C\n☁️ Toxic Atmosphere",
+      info: " Hottest Planet \n Temp: 465°C \n Toxic Atmosphere",
     },
     {
       name: "Earth",
@@ -30,7 +29,7 @@ export default function SpaceModel() {
       distance: 90,
       color: 0x4a90e2,
       speed: 0.6,
-      info: "🏠 Our Home\n🌡️ Temp: 15°C\n💧 Water Planet\n🦋 Life Here",
+      info: " Our Home \n Temp: 15°C \n Water Planet\n Life Here",
     },
     {
       name: "Mars",
@@ -38,7 +37,7 @@ export default function SpaceModel() {
       distance: 130,
       color: 0xe27b58,
       speed: 0.45,
-      info: "🔴 The Red Planet\n🌡️ Temp: -65°C\n🪨 Rocky Surface",
+      info: " The Red Planet \n Temp: -65°C \n Rocky Surface",
     },
     {
       name: "Jupiter",
@@ -46,7 +45,7 @@ export default function SpaceModel() {
       distance: 260,
       color: 0xd2b48c,
       speed: 0.24,
-      info: "🪨 Gas Giant\n⚡ Strongest Storms\n🌀 Great Red Spot\n🛰️ 95 Moons",
+      info: " Gas Giant \n Strongest Storms \n Great Red Spot \n 95 Moons",
     },
     {
       name: "Saturn",
@@ -54,7 +53,7 @@ export default function SpaceModel() {
       distance: 400,
       color: 0xf5deb3,
       speed: 0.15,
-      info: "💍 Iconic Rings\n🪨 Gas Giant\n🌬️ Windy Atmosphere\n🛰️ 146 Moons",
+      info: " Iconic Rings\n Gas Giant\n Windy Atmosphere\n 146 Moons",
     },
     {
       name: "Uranus",
@@ -62,7 +61,7 @@ export default function SpaceModel() {
       distance: 560,
       color: 0x7fffd4,
       speed: 0.09,
-      info: "❄️ Ice Giant\n🌡️ Temp: -224°C\n🔵 Icy Composition\n🛰️ 27 Moons",
+      info: " Ice Giant\n Temp: -224°C\n Icy Composition\n 27 Moons",
     },
     {
       name: "Neptune",
@@ -70,12 +69,61 @@ export default function SpaceModel() {
       distance: 700,
       color: 0x4169e1,
       speed: 0.06,
-      info: "❄️ Windiest Planet\n🌡️ Temp: -200°C\n🌀 Supersonic Winds\n🛰️ 14 Moons",
+      info: " Windiest Planet\n Temp: -200°C\n Supersonic Winds\n< 14 Moons",
     },
   ]
 
   const containerRef = useRef<HTMLDivElement>(null)
-  const hoveredPlanetRef = useRef<string | null>(null)
+  const onhoverplanet = useRef<string>(null)
+
+  function createPlanetTexture(planet: { name: string; color: number }) {
+    const canvas = document.createElement("canvas")
+    canvas.width = 512
+    canvas.height = 512
+    const ctx = canvas.getContext("2d")!
+
+    ctx.fillStyle = `#${planet.color.toString(16).padStart(6, "0")}`
+    ctx.fillRect(0, 0, 512, 512)
+
+    if (planet.name === "Earth") {
+      ctx.fillStyle = "#64C86466"
+      ctx.fillRect(50, 100, 150, 100)
+      ctx.fillRect(300, 200, 100, 80)
+      ctx.fillStyle = "#C8DCFF4D"
+      ctx.fillRect(0, 0, 100, 100)
+      ctx.fillRect(200, 100, 150, 80)
+    }
+
+    if (planet.name === "Jupiter") {
+      ctx.fillStyle = "#8B5A2B99"
+      for (let i = 50; i < 512; i += 80) {
+        ctx.fillRect(0, i, 512, 40)
+      }
+    }
+
+    if (planet.name === "Saturn") {
+      ctx.strokeStyle = "#C8B478B2"
+      ctx.lineWidth = 30
+      ctx.beginPath()
+      ctx.ellipse(256, 256, 200, 100, 0, 0, Math.PI * 2)
+      ctx.stroke()
+    }
+
+    ctx.fillStyle = "#FFFFFF33"
+    for (let i = 0; i < 10; i++) {
+      ctx.beginPath()
+      ctx.arc(
+        Math.random() * 512,
+        Math.random() * 512,
+        Math.random() * 15,
+        0,
+        Math.PI * 2
+      )
+      ctx.fill()
+    }
+
+    return new THREE.CanvasTexture(canvas)
+  }
 
   useEffect(() => {
     const raycast = new THREE.Raycaster()
@@ -118,52 +166,7 @@ export default function SpaceModel() {
 
     const planetMeshes = planets.map((planet) => {
       const geometry = new THREE.SphereGeometry(planet.size / 2, 64, 64)
-      const canvas = document.createElement("canvas")
-      canvas.width = 512
-      canvas.height = 512
-      const ctx = canvas.getContext("2d")!
-
-      ctx.fillStyle = `#${planet.color.toString(16).padStart(6, "0")}`
-      ctx.fillRect(0, 0, 512, 512)
-
-      if (planet.name === "Earth") {
-        ctx.fillStyle = "rgba(100, 200, 100, 0.4)"
-        ctx.fillRect(50, 100, 150, 100)
-        ctx.fillRect(300, 200, 100, 80)
-        ctx.fillStyle = "rgba(200, 220, 255, 0.3)"
-        ctx.fillRect(0, 0, 100, 100)
-        ctx.fillRect(200, 100, 150, 80)
-      }
-
-      if (planet.name === "Jupiter") {
-        ctx.fillStyle = "rgba(139, 90, 43, 0.6)"
-        for (let i = 50; i < 512; i += 80) {
-          ctx.fillRect(0, i, 512, 40)
-        }
-      }
-
-      if (planet.name === "Saturn") {
-        ctx.strokeStyle = "rgba(200, 180, 120, 0.7)"
-        ctx.lineWidth = 30
-        ctx.beginPath()
-        ctx.ellipse(256, 256, 200, 100, 0, 0, Math.PI * 2)
-        ctx.stroke()
-      }
-
-      ctx.fillStyle = "rgba(255,255,255,0.2)"
-      for (let i = 0; i < 10; i++) {
-        ctx.beginPath()
-        ctx.arc(
-          Math.random() * 512,
-          Math.random() * 512,
-          Math.random() * 15,
-          0,
-          Math.PI * 2
-        )
-        ctx.fill()
-      }
-
-      const texture = new THREE.CanvasTexture(canvas)
+      const texture = createPlanetTexture(planet)
       const material = new THREE.MeshStandardMaterial({
         map: texture,
         roughness: 0.7,
@@ -171,7 +174,7 @@ export default function SpaceModel() {
       const mesh = new THREE.Mesh(geometry, material)
       mesh.position.x = planet.distance
       scene.add(mesh)
-      console.log(`Added planet: ${planet.name} at distance ${planet.distance}`)
+
       return { mesh, ...planet }
     })
 
@@ -200,8 +203,8 @@ export default function SpaceModel() {
           hoveredMesh.scale.set(1.2, 1.2, 1.2)
           previouslyHovered = hoveredMesh
 
-          if (hoveredPlanetRef.current !== hoveredPlanet.name) {
-            hoveredPlanetRef.current = hoveredPlanet.name
+          if (onhoverplanet.current !== hoveredPlanet.name) {
+            onhoverplanet.current = hoveredPlanet.name
             setInfo(`${hoveredPlanet.name}\n\n${hoveredPlanet.info}`)
           }
         }
@@ -210,8 +213,8 @@ export default function SpaceModel() {
           previouslyHovered.scale.set(1, 1, 1)
           previouslyHovered = null
 
-          if (hoveredPlanetRef.current !== null) {
-            hoveredPlanetRef.current = null
+          if (onhoverplanet.current !== null) {
+            onhoverplanet.current = null
             setInfo("")
           }
         }

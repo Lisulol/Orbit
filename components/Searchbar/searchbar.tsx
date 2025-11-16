@@ -15,7 +15,7 @@ const SOLAR_SYSTEM_PLANETS = [
 export default function Searchbar() {
   const [query, setQuery] = useState("")
   const [result, setResult] = useState<any>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isOpen, setisOpen] = useState(false)
 
   const isPlanetOrExoplanet = (title: string) => {
     if (SOLAR_SYSTEM_PLANETS.some((planet) => title.includes(planet))) {
@@ -36,7 +36,7 @@ export default function Searchbar() {
       const data = await response.json()
       if (isPlanetOrExoplanet(data.title)) {
         setResult(data)
-        setIsModalOpen(true)
+        setisOpen(true)
         console.log("Planet data:", data)
       }
     } catch (err) {
@@ -69,11 +69,11 @@ export default function Searchbar() {
         value={query}
         onChange={handleChange}
       ></input>
-      {isModalOpen && result && (
+      {isOpen && result && (
         <div
           className="h-screen w-screen fixed flex items-center justify-center inset-0"
           style={{ zIndex: 9999, backgroundColor: "rgba(0, 0, 0, 0.6)" }}
-          onClick={() => setIsModalOpen(false)}
+          onClick={() => setisOpen(false)}
         >
           <div
             className="h-4/5 w-4/5 rounded-4xl p-10 flex flex-col gap-4 overflow-auto"
@@ -87,12 +87,12 @@ export default function Searchbar() {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center gap-2">
-              <h2
+              <p
                 className="font-bold text-2xl"
                 style={{ color: "var(--text-primary)" }}
               >
                 {result.title}
-              </h2>
+              </p>
               <span className="text-sm px-3 py-1 rounded bg-blue-500 text-white">
                 {result.title.includes("Exoplanet") ? "Exoplanet" : "Planet"}
               </span>

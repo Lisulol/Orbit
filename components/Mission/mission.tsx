@@ -3,7 +3,6 @@ import { useEffect, useState } from "react"
 
 export default function Mission() {
   const [missions, setMissions] = useState<any[]>([])
-  const [error, setError] = useState("")
 
   useEffect(() => {
     fetchMissionData()
@@ -14,15 +13,12 @@ export default function Mission() {
       const res = await fetch(
         "https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=10"
       )
-      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`)
-      const data = await res.json()
 
-      console.log("Missions data:", data)
+      const data = await res.json()
 
       setMissions((data.results || []).slice(0, 8))
     } catch (err) {
       console.error("Missions error:", err)
-      setError("Failed to load missions")
     }
   }
 
@@ -44,16 +40,11 @@ export default function Mission() {
       >
         Upcoming Missions
       </h2>
-      {error && <p className="text-red-500 text-xs">{error}</p>}
-      {missions.length === 0 && !error && (
-        <p className="text-xs" style={{ color: "var(--text-primary)" }}>
-          Loading...
-        </p>
-      )}
+
       <div className="flex gap-y-3 flex-col overflow-hidden">
-        {missions.map((mission, index) => (
+        {missions.map((mission, i) => (
           <div
-            key={index}
+            key={i}
             className="flex-row flex gap-x-2 items-center rounded-2xl text-xs p-2 border-b last:border-b-0"
             style={{
               backgroundColor: "var(--bg-card)",

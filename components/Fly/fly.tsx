@@ -10,7 +10,6 @@ export default function Fly() {
     latitude: number
     longitude: number
   } | null>(null)
-  const [mounted, setMounted] = useState(false)
 
   const SATELLITES = [
     { name: "ISS (ZARYA)", id: 25544 },
@@ -18,12 +17,6 @@ export default function Fly() {
   ]
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  useEffect(() => {
-    if (!mounted) return
-
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setLocation({
@@ -32,16 +25,10 @@ export default function Fly() {
         })
       },
       (error) => {
-        if (error.code === error.PERMISSION_DENIED) {
-          console.log("User denied location permission")
-        } else if (error.code === error.POSITION_UNAVAILABLE) {
-          console.log("Location data unavailable")
-        }
-
-        setLocation({ latitude: 51.5074, longitude: -0.1278 })
+        console.log(error)
       }
     )
-  }, [mounted])
+  })
 
   useEffect(() => {
     if (location) {
@@ -54,11 +41,8 @@ export default function Fly() {
       const allData: any = {}
 
       for (const sat of SATELLITES) {
-        const apiUrl = `https://api.n2yo.com/rest/v1/satellite/positions/${sat.id}/${lat}/${lon}/0/1?apiKey=${N2YO_API_KEY}`
         const res = await fetch(
-          `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(
-            apiUrl
-          )}`
+          `https://api.codetabs.com/v1/proxy?quest=https://api.n2yo.com/rest/v1/satellite/positions/${sat.id}/${lat}/${lon}/0/1?apiKey=${N2YO_API_KEY}`
         )
         const responseText = await res.text()
         const data = JSON.parse(responseText)
@@ -66,9 +50,8 @@ export default function Fly() {
       }
 
       setSatelliteData(allData)
-      console.log("All satellite data:", allData)
     } catch (err) {
-      console.error("Fly error:", err)
+      console.log(err)
     }
   }
   return (
@@ -103,23 +86,21 @@ export default function Fly() {
             return (
               <div key={sat.id} className="mb-4">
                 <p className="font-bold mb-2">{sat.name}</p>
-                {satData.data.positions
-                  .slice(0, 2)
-                  .map((pass: any, idx: number) => (
-                    <div
-                      key={idx}
-                      className="mb-2 p-2 rounded-2xl text-xs"
-                      style={{
-                        backgroundColor: "var(--bg-card)",
-                        borderColor: "var(--border-light)",
-                        border: "1px solid",
-                      }}
-                    >
-                      <p>Pass {idx + 1}</p>
-                      <p>Elevation: {pass.elevation}°</p>
-                      <p>Azimuth: {pass.azimuth}°</p>
-                    </div>
-                  ))}
+                {satData.data.positions.map((pass: any, i: number) => (
+                  <div
+                    key={i}
+                    className="mb-2 p-2 rounded-2xl text-xs"
+                    style={{
+                      backgroundColor: "var(--bg-card)",
+                      borderColor: "var(--border-light)",
+                      border: "1px solid",
+                    }}
+                  >
+                    <p>Pass {i + 1}</p>
+                    <p>Elevation: {pass.elevation}°</p>
+                    <p>Azimuth: {pass.azimuth}°</p>
+                  </div>
+                ))}
               </div>
             )
           })}
