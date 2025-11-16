@@ -20,7 +20,7 @@ export default function Navbar() {
 
   return (
     <div
-      className="font-bold text-4xl relative h-20 w-full border-gradient flex items-center justify-center px-10"
+      className="font-bold text-4xl relative h-20 w-full border-gradient flex items-center justify-center px-10 pointer-events-auto"
       style={{ backgroundColor: "var(--bg-primary)" }}
     >
       <ShootingStars
@@ -31,14 +31,14 @@ export default function Navbar() {
         minDelay={16}
         maxDelay={20}
       />
-      <div className="flex items-center justify-between flex-row w-full">
-        <div
+      <div className="flex items-center justify-between flex-row w-full relative z-10">
+        <button
           onClick={ChangeTheme}
-          className="cursor-pointer pointer-events-auto"
+          className="cursor-pointer pointer-events-auto bg-transparent border-none p-0"
           style={{ color: "var(--text-primary)" }}
         >
           {theme === "dark" ? <IconSun size={24} /> : <IconMoon size={24} />}
-        </div>
+        </button>
         <div className="items-center justify-center flex flex-col">
           <p className="bg-clip-text text-transparent bg-linear-to-b from-(--accent-primary) to-(--accent-secondary)">
             Orbit
@@ -47,14 +47,14 @@ export default function Navbar() {
             An interactive space tracker
           </p>
         </div>
-        <div
+        <a
+          target="_blank"
+          href="https://github.com/Lisulol"
+          className="pointer-events-auto cursor-pointer"
           style={{ color: "var(--text-primary)" }}
-          className="pointer-events-auto"
         >
-          <a target={"_blank"} href={"https://github.com/Lisulol"}>
-            <IconBrandGithub size={24} />
-          </a>
-        </div>
+          <IconBrandGithub size={24} />
+        </a>
       </div>
     </div>
   )

@@ -55,7 +55,7 @@ export default function Picture() {
             {PictureData.title}
           </p>
           <p
-            className="relative group flex flex-row items-center gap-5 rounded-2xl border p-5 whitespace-nowrap"
+            className="relative group flex flex-row items-center gap-5 rounded-2xl border p-5 whitespace-nowrap hover:cursor-pointer"
             style={{
               backgroundColor: "var(--bg-card)",
               borderColor: "var(--border-light)",
@@ -63,7 +63,7 @@ export default function Picture() {
           >
             {PictureData.explanation.slice(0, 20)}...
             <span
-              className="absolute opacity-0 group-hover:opacity-100 transition-opacity rounded-4xl border p-5 text-xs whitespace-normal z-999 top-0 left-0 w-55 -mt-102"
+              className="absolute opacity-0 group-hover:opacity-100 transition-opacity rounded-4xl border p-5 text-xs whitespace-normal z-999 top-0 left-0 w-55 -mt-102 pointer-events-none"
               style={{
                 backgroundColor: "var(--bg-card)",
                 color: "var(--text-primary)",

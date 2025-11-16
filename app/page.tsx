@@ -1,9 +1,14 @@
+import SpaceModel from "@/components/3D-Model/space"
+import Fly from "@/components/Fly/fly"
 import ISS from "@/components/ISS/iss"
 import MarsWeather from "@/components/MarsWeather/marsweather"
+import Meteor from "@/components/Meteor/meteor"
 import Mission from "@/components/Mission/mission"
 import Navbar from "@/components/navbar/navbar"
+import NEO from "@/components/neo/neo"
 import Picture from "@/components/Picture/picture"
 import { Meteors } from "@/components/ui/shadcn-io/meteors"
+import Smth from "@/components/ymmidk/smth"
 
 export default function DashBoard() {
   return (
@@ -27,27 +32,17 @@ export default function DashBoard() {
           <div className="flex gap-x-10 items-center h-1/2 w-full">
             <ISS />
             <MarsWeather />
+            <NEO />
+            <Meteor />
           </div>
           <div className="flex gap-x-10 items-center h-1/2 w-full">
             <Mission />
             <Picture />
+            <Fly />
+            <Smth />
           </div>
         </div>
       </div>
     </div>
   )
 }
-
-// --radius: 0.625rem;
-//   --background: oklch(89.755% 0.0001 271.152);
-//   --border: #7e8bfc;
-//   --border-container: #7e8bfc;
-//   --bg-components: #8a8a8a;
-//   --foreground: oklch(0.129 0.042 264.695);
-//   --card: oklch(1 0 0);
-//   --text-primatry: oklch(0% 0 0);
-//   --card-foreground: oklch(0.129 0.042 264.695);
-//   --popover: oklch(1 0 0);
-//   --popover-foreground: oklch(0.129 0.042 264.695);
-//   --primary: oklch(0.208 0.042 265.755);
-//   --primary-foreground:
