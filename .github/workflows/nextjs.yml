@@ -79,7 +79,7 @@ jobs:
         env:
           NEXT_PUBLIC_NASA_API_KEY: ${{ secrets.NASA_API_KEY }}
           NEXT_PUBLIC_N2YO_API_KEY: ${{ secrets.N2YO_API_KEY }}
-        run: ${{ steps.detect-package-manager.outputs.runner }} next build
+        run: npm run build
       - name: Export static HTML
         # Produces ./out for Pages deployment
         run: ${{ steps.detect-package-manager.outputs.runner }} next export
