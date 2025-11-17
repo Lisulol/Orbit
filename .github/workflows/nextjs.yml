@@ -76,7 +76,13 @@ jobs:
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Build with Next.js
+        env:
+          NEXT_PUBLIC_NASA_API_KEY: ${{ secrets.NASA_API_KEY }}
+          NEXT_PUBLIC_N2YO_API_KEY: ${{ secrets.N2YO_API_KEY }}
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
+      - name: Export static HTML
+        # Produces ./out for Pages deployment
+        run: ${{ steps.detect-package-manager.outputs.runner }} next export
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
