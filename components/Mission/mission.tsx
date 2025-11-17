@@ -11,7 +11,7 @@ export default function Mission() {
   async function fetchMissionData() {
     try {
       const res = await fetch(
-        "https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=10"
+        "https://api.codetabs.com/v1/proxy?quest=https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=10"
       )
 
       const data = await res.json()
