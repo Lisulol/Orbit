@@ -41,17 +41,30 @@ export default function Fly() {
       const allData: any = {}
 
       for (const sat of SATELLITES) {
-        const res = await fetch(
-          `https://api.codetabs.com/v1/proxy?quest=https://api.n2yo.com/rest/v1/satellite/positions/${sat.id}/${lat}/${lon}/0/1?apiKey=${N2YO_API_KEY}`
-        )
-        const responseText = await res.text()
-        const data = JSON.parse(responseText)
+        // Use corsproxy.io - fast and reliable
+        const targetUrl = `https://api.n2yo.com/rest/v1/satellite/positions/${sat.id}/${lat}/${lon}/0/1/&apiKey=${N2YO_API_KEY}`
+        const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(
+          targetUrl
+        )}`
+
+        const res = await fetch(proxyUrl)
+
+        if (!res.ok) {
+          console.error(
+            `Failed to fetch ${sat.name}: ${res.status} ${res.statusText}`
+          )
+          continue
+        }
+
+        const data = await res.json()
         allData[sat.id] = { name: sat.name, data: data }
       }
 
       setSatelliteData(allData)
     } catch (err) {
-      console.log(err)
+      console.error("Satellite data fetch error:", err)
+      // Set empty data to stop loading state
+      setSatelliteData({})
     }
   }
   return (

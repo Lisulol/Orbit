@@ -11,9 +11,7 @@ export default function ISS() {
   const [issData, setIssData] = useState<any>(null)
 
   useEffect(() => {
-    fetch(
-      "https://api.codetabs.com/v1/proxy?quest=https://api.open-notify.org/iss-now.json"
-    )
+    fetch("https://api.cors.lol/?url=https://api.open-notify.org/iss-now.json")
       .then((res) => res.json())
       .then((data) => setIssData(data))
       .catch(() => {
