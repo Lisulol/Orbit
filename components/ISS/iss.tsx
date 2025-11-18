@@ -24,7 +24,9 @@ export default function ISS() {
       })
   }, [])
 
-  if (!issData) return <div className="text-white">Loading ISS data...</div>
+  if (!issData || !issData.iss_position) {
+    return <div className="text-white">Loading ISS data...</div>
+  }
 
   const lat = issData.iss_position.latitude
   const lon = issData.iss_position.longitude
